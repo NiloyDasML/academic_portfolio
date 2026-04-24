@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Niloy Das</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f3ee;
+      --surface: #ffffff;
+      --navy: #0b1929;
+      --navy-2: #152438;
+      --gold: #b07d2e;
+      --gold-lt: #c9972e;
+      --gold-pale: rgba(176, 125, 46, .10);
+      --muted: #64748b;
+      --border: #e0dbd0;
+      --text: #1a2b3c;
+      --text-2: #475569;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --mono: 'DM Mono', monospace;
+      --rad: 8px;
+      --ease: cubic-bezier(.4, 0, .2, 1);
+      --nav-h: 64px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--nav-h);
+      font-size: 16px
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      width: 100%;
+      overflow-x: hidden
+    }
+
+    a {
+      color: var(--gold);
+      text-decoration: none;
+      transition: color .25s var(--ease)
+    }
+
+    a:hover {
+      color: var(--navy)
+    }
+
+    ul {
+      list-style: none
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg)
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 10px
+    }
+
+    /* Progress */
+    #progress {
+      position: fixed;
+      top: var(--nav-h);
+      left: 0;
+      height: 2px;
+      z-index: 200;
+      background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+      width: 0;
+      transition: width .08s linear
+    }
+
+    /* Nav */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: var(--nav-h);
+      z-index: 150;
+      background: rgba(245, 243, 238, .95);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw
+    }
+
+    .nav-brand {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: .01em;
+      flex-shrink: 0
+    }
+
+    .nav-brand em {
+      color: var(--gold);
+      font-style: normal
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: .1rem;
+      flex-wrap: nowrap
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      padding: .3rem .6rem;
+      border-radius: 5px;
+      transition: background .2s, color .2s;
+      white-space: nowrap
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--gold);
+      background: var(--gold-pale)
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 7px;
+      flex-shrink: 0;
+      transition: background .2s
+    }
+
+    .nav-toggle:hover {
+      background: var(--gold-pale)
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 18px;
+      height: 1.5px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform .3s var(--ease), opacity .3s
+    }
+
+    .nav-toggle.open span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg)
+    }
+
+    .nav-toggle.open span:nth-child(2) {
+      opacity: 0
+    }
+
+    .nav-toggle.open span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg)
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: var(--nav-h);
+      left: 0;
+      right: 0;
+      background: rgba(245, 243, 238, .98);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      z-index: 140;
+      padding: 1rem 5vw 1.5rem;
+      flex-direction: column;
+      gap: .15rem;
+      transform: translateY(-8px);
+      opacity: 0;
+      transition: transform .3s var(--ease), opacity .3s;
+      pointer-events: none;
+      display: none
+    }
+
+    .mobile-drawer.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all
+    }
+
+    .mobile-drawer a {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      padding: .6rem .75rem;
+      border-radius: 6px;
+      transition: background .2s, color .2s;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .mobile-drawer a:last-child {
+      border-bottom: none
+    }
+
+    .mobile-drawer a:hover {
+      color: var(--gold);
+      background: var(--gold-pale)
+    }
+
+    /* Layout */
+    section {
+      width: 100%;
+      padding: 5.5rem 0 4.5rem
+    }
+
+    section:nth-of-type(even) {
+      background: var(--surface)
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 5vw
+    }
+
+    /* Section header */
+    .sh-label {
+      font-family: var(--mono);
+      font-size: .63rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .4rem
+    }
+
+    .sh-title {
+      font-family: var(--serif);
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.15;
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem
+    }
+
+    .sh-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      margin-bottom: .5rem
+    }
+
+    /* Animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .55s var(--ease), transform .55s var(--ease)
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: none
+    }
+
+    @keyframes aUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    @keyframes aLeft {
+      from {
+        opacity: 0;
+        transform: translateX(28px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* ── HERO ── */
+    #about {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      background: var(--navy);
+      background-image: radial-gradient(ellipse 65% 70% at 12% 50%, rgba(176, 125, 46, .10) 0%, transparent 70%), radial-gradient(ellipse 45% 45% at 92% 8%, rgba(176, 125, 46, .06) 0%, transparent 60%);
+      overflow: hidden;
+      position: relative
+    }
+
+    #about::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(176, 125, 46, .13) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 8rem 5vw 5rem;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 3rem;
+      align-items: center
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: aUp .65s var(--ease) .15s forwards
+    }
+
+    .hero-name {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 5.5vw, 4.4rem);
+      font-weight: 700;
+      color: #eef0f4;
+      line-height: 1.05;
+      margin-bottom: .55rem;
+      white-space: nowrap;
+      opacity: 0;
+      animation: aUp .65s var(--ease) .3s forwards
+    }
+
+    .hero-name em {
+      color: var(--gold-lt);
+      font-style: italic
+    }
+
+    .hero-sub {
+      font-size: .85rem;
+      color: #94a3b8;
+      font-family: var(--mono);
+      letter-spacing: .04em;
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      animation: aUp .65s var(--ease) .45s forwards
+    }
+
+    .hero-bio {
+      font-size: .98rem;
+      color: #c4cdd8;
+      max-width: 580px;
+      line-height: 1.9;
+      font-weight: 300;
+      margin-bottom: 1.75rem;
+      opacity: 0;
+      animation: aUp .65s var(--ease) .6s forwards
+    }
+
+    .hero-bio em {
+      color: var(--gold-lt);
+      font-style: italic
+    }
+
+    .interests-block {
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: aUp .65s var(--ease) .75s forwards
+    }
+
+    .interests-label {
+      font-family: var(--mono);
+      font-size: .6rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: .6rem
+    }
+
+    .interest-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .35rem
+    }
+
+    .itag {
+      padding: .2rem .7rem;
+      border: 1px solid rgba(176, 125, 46, .32);
+      border-radius: 20px;
+      font-family: var(--mono);
+      font-size: .6rem;
+      color: #94a3b8;
+      letter-spacing: .04em;
+      transition: border-color .25s, color .25s;
+      cursor: default
+    }
+
+    .itag:hover {
+      border-color: var(--gold);
+      color: var(--gold-lt)
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: .7rem;
+      flex-wrap: wrap;
+      align-items: center;
+      opacity: 0;
+      animation: aUp .65s var(--ease) .9s forwards
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      font-family: var(--mono);
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      border-radius: 6px;
+      padding: .6rem 1.2rem;
+      transition: all .25s var(--ease);
+      cursor: pointer;
+      white-space: nowrap;
+      border: none
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #fff
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-lt);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(176, 125, 46, .35)
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, .14)
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold-lt)
+    }
+
+    .cv-drop {
+      position: relative;
+      display: inline-block
+    }
+
+    .cv-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: var(--navy-2);
+      border: 1px solid rgba(176, 125, 46, .28);
+      border-radius: 8px;
+      min-width: 195px;
+      overflow: hidden;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .4);
+      z-index: 60
+    }
+
+    .cv-drop:hover .cv-menu {
+      display: block
+    }
+
+    .cv-menu a {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      padding: .75rem 1rem;
+      font-family: var(--mono);
+      font-size: .65rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #94a3b8;
+      transition: background .2s, color .2s;
+      border-bottom: 1px solid rgba(255, 255, 255, .05)
+    }
+
+    .cv-menu a:last-child {
+      border-bottom: none
+    }
+
+    .cv-menu a:hover {
+      background: rgba(176, 125, 46, .13);
+      color: var(--gold-lt)
+    }
+
+    .hero-right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      animation: aLeft .8s var(--ease) 1s forwards
+    }
+
+    .profile-wrap {
+      position: relative;
+      width: 270px;
+      height: 270px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translateY(-80px);
+      /* adjust value as needed */
+    }
+
+    .profile-ring {
+      position: absolute;
+      inset: -18px;
+      border-radius: 50%;
+      border: 1px dashed rgba(176, 125, 46, .22);
+      animation: spin 35s linear infinite;
+      pointer-events: none
+    }
+
+    .profile-ring-2 {
+      position: absolute;
+      inset: -32px;
+      border-radius: 50%;
+      border: 1px dashed rgba(176, 125, 46, .10);
+      animation: spin 55s linear infinite reverse;
+      pointer-events: none
+    }
+
+    .profile-frame {
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      border: 3px solid rgba(176, 125, 46, .5);
+      box-shadow: 0 0 0 9px rgba(176, 125, 46, .08), 0 24px 64px rgba(0, 0, 0, .45);
+      overflow: hidden;
+      background: var(--navy-2);
+      position: relative;
+      z-index: 1
+    }
+
+    .profile-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block
+    }
+
+    .profile-initials {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 5rem;
+      font-weight: 700;
+      color: rgba(176, 125, 46, .55);
+      letter-spacing: -.05em;
+      user-select: none
+    }
+
+    /* ── EDUCATION ── */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem
+    }
+
+    .edu-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--rad);
+      padding: 1.75rem 1.5rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+      transition: box-shadow .3s var(--ease), transform .3s var(--ease)
+    }
+
+    .edu-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-lt))
+    }
+
+    .edu-card:hover {
+      box-shadow: 0 10px 34px rgba(11, 25, 41, .1);
+      transform: translateY(-4px)
+    }
+
+    .edu-year {
+      font-family: var(--mono);
+      font-size: .6rem;
+      letter-spacing: .12em;
+      color: var(--muted);
+      text-transform: uppercase
+    }
+
+    .edu-degree {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.3
+    }
+
+    .edu-inst {
+      font-size: .82rem;
+      color: var(--gold);
+      font-weight: 500;
+      line-height: 1.45
+    }
+
+    .edu-badge {
+      display: inline-block;
+      padding: .17rem .65rem;
+      background: var(--gold-pale);
+      border: 1px solid rgba(176, 125, 46, .25);
+      border-radius: 20px;
+      font-family: var(--mono);
+      font-size: .6rem;
+      color: var(--gold);
+      letter-spacing: .04em;
+      width: fit-content
+    }
+
+    .edu-desc {
+      font-size: .82rem;
+      color: var(--text-2);
+      line-height: 1.65;
+      margin-top: .2rem
+    }
+
+    /* ── RESEARCH (v1-style with improvements) ── */
+    .research-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem
+    }
+
+    .rc {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: var(--rad);
+      padding: 1.75rem 2rem;
+      transition: box-shadow .35s var(--ease), transform .35s var(--ease)
+    }
+
+    .rc:hover {
+      box-shadow: 0 10px 36px rgba(11, 25, 41, .09);
+      transform: translateX(4px)
+    }
+
+    .rc-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: .85rem;
+      flex-wrap: wrap
+    }
+
+    .rc-title {
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.3
+    }
+
+    .rc-period {
+      font-family: var(--mono);
+      font-size: .6rem;
+      letter-spacing: .08em;
+      color: var(--muted);
+      white-space: nowrap;
+      padding-top: .15rem;
+      padding: .2rem .65rem;
+      background: var(--gold-pale);
+      border: 1px solid rgba(176, 125, 46, .2);
+      border-radius: 20px
+    }
+
+    /* .rc-list{display:flex;flex-direction:column;gap:.45rem;margin-bottom:.9rem} */
+    /* .rc-list li{display:flex;gap:.55rem;font-size:.875rem;color:var(--text-2);line-height:1.65} */
+    /* .rc-list li::before{content:'→';color:var(--gold);font-size:.78rem;flex-shrink:0;margin-top:.22rem;font-weight:500} */
+    .rc-body {
+      font-size: 0.92rem;
+      color: var(--text-sm);
+    }
+
+    .rc-body li {
+      position: relative;
+      padding-left: 1.25rem;
+      margin-bottom: 0.45rem;
+      line-height: 1.65;
+    }
+
+    .rc-body li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 0.8rem;
+      top: 0.1rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .32rem;
+      margin-top: .4rem
+    }
+
+    .chip {
+      padding: .17rem .58rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: .59rem;
+      color: var(--text-2);
+      letter-spacing: .04em;
+      transition: border-color .2s, color .2s
+    }
+
+    .chip:hover {
+      border-color: var(--gold);
+      color: var(--gold)
+    }
+
+    /* ── PUBLICATIONS ── */
+    .pub-group-hd {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      margin: 2rem 0 .85rem;
+      font-family: var(--mono);
+      font-size: .6rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted)
+    }
+
+    .pub-group-hd::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border)
+    }
+
+    .pub-item {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 0 .85rem;
+      padding: .85rem 0;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .pub-item:last-child {
+      border-bottom: none
+    }
+
+    .pub-n {
+      font-family: var(--mono);
+      font-size: .68rem;
+      color: var(--gold);
+      padding-top: .06rem
+    }
+
+    .pub-title {
+      font-family: var(--serif);
+      font-size: .96rem;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.45;
+      margin-bottom: .18rem
+    }
+
+    .pub-authors {
+      font-size: .81rem;
+      color: var(--text-2);
+      margin-bottom: .12rem
+    }
+
+    .pub-authors strong {
+      color: var(--navy);
+      font-weight: 600
+    }
+
+    .pub-venue {
+      font-size: .78rem;
+      color: var(--muted);
+      font-style: italic
+    }
+
+    .badge {
+      display: inline-block;
+      padding: .06rem .42rem;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: .58rem;
+      font-style: normal;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      vertical-align: middle;
+      margin-left: .3rem
+    }
+
+    .b-pub {
+      background: rgba(22, 163, 74, .1);
+      color: #16a34a
+    }
+
+    .b-accept {
+      background: rgba(37, 99, 235, .1);
+      color: #2563eb
+    }
+
+    .b-review {
+      background: rgba(217, 119, 6, .1);
+      color: #b45309
+    }
+
+    .b-prep {
+      background: rgba(100, 116, 139, .1);
+      color: #475569
+    }
+
+    .b-submit {
+      background: rgba(124, 58, 237, .1);
+      color: #6d28d9
+    }
+
+    /* ── PROJECTS (v1-style grid) ── */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem
+    }
+
+    .proj-featured {
+      grid-column: 1 / -1
+    }
+
+    .proj-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--rad);
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow .3s var(--ease), transform .3s var(--ease);
+      display: flex;
+      flex-direction: column;
+      gap: .6rem
+    }
+
+    .proj-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-lt))
+    }
+
+    .proj-featured::after {
+      background: linear-gradient(90deg, var(--navy), var(--navy-2))
+    }
+
+    .proj-card:hover {
+      box-shadow: 0 12px 40px rgba(11, 25, 41, .1);
+      transform: translateY(-4px)
+    }
+
+    .proj-type {
+      font-family: var(--mono);
+      font-size: .59rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gold)
+    }
+
+    .proj-title {
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.3
+    }
+
+    .proj-desc {
+      font-size: .86rem;
+      color: var(--text-2);
+      line-height: 1.7;
+      flex: 1
+    }
+
+    .proj-meta {
+      font-family: var(--mono);
+      font-size: .62rem;
+      color: var(--muted)
+    }
+
+    .proj-metric {
+      font-family: var(--mono);
+      font-size: .6rem;
+      color: var(--gold);
+      padding: .2rem .6rem;
+      background: var(--gold-pale);
+      border: 1px solid rgba(176, 125, 46, .2);
+      border-radius: 4px;
+      display: inline-block;
+      width: fit-content
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .32rem
+    }
+
+    .pill {
+      padding: .2rem .68rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-family: var(--mono);
+      font-size: .64rem;
+      color: var(--text);
+      transition: border-color .2s, color .2s
+    }
+
+    .pill:hover {
+      border-color: var(--gold);
+      color: var(--gold)
+    }
+
+    .pill-hl {
+      border-color: rgba(176, 125, 46, .35);
+      color: var(--gold);
+      background: var(--gold-pale)
+    }
+
+    /* ── SKILLS ── */
+    .skills-layout {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem 2.5rem
+    }
+
+    .sg-title {
+      font-family: var(--mono);
+      font-size: .6rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .65rem;
+      padding-bottom: .38rem;
+      border-bottom: 1px solid var(--border)
+    }
+
+    /* ── LEADERSHIP ── */
+    .ls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem
+    }
+
+    .ls-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--rad);
+      padding: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: box-shadow .3s, transform .3s var(--ease)
+    }
+
+    .ls-card:hover {
+      box-shadow: 0 6px 24px rgba(11, 25, 41, .07);
+      transform: translateY(-2px)
+    }
+
+    .ls-dot {
+      width: 9px;
+      height: 9px;
+      background: var(--gold);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: .5rem
+    }
+
+    .ls-role {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy)
+    }
+
+    .ls-org {
+      font-size: .8rem;
+      color: var(--gold);
+      margin-bottom: .3rem
+    }
+
+    .ls-desc {
+      font-size: .84rem;
+      color: var(--text-2);
+      line-height: 1.65
+    }
+
+    /* ── CONTACT (icon-focused) ── */
+    #contact {
+      background: var(--navy);
+      background-image: radial-gradient(ellipse 55% 55% at 92% 88%, rgba(176, 125, 46, .07) 0%, transparent 60%)
+    }
+
+    #contact .sh-label {
+      color: var(--gold-lt)
+    }
+
+    #contact .sh-title {
+      color: #eef0f4
+    }
+
+    #contact .sh-title::after {
+      background: rgba(255, 255, 255, .09)
+    }
+
+    .ci-grid {
+      display: flex;
+      /* grid-template-columns: repeat(3, 1fr); */
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      overflow-x: auto;
+      padding-top: 0.5rem;
+      padding-bottom: .5rem
+      /* gap: .85rem */
+    }
+
+    /* .ci-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .65rem;
+      padding: 1.75rem 1rem;
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: var(--rad);
+      color: #94a3b8;
+      text-align: center;
+      transition: background .25s, border-color .25s, color .25s, transform .25s
+    }
+
+    .ci-link:hover {
+      background: rgba(176, 125, 46, .1);
+      border-color: rgba(176, 125, 46, .3);
+      color: var(--gold-lt);
+      transform: translateY(-3px)
+    } */
+
+    .ci-link {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 12px;
+      color: #94a3b8;
+      font-size: 1.2rem;
+      transition: all .25s ease;
+    }
+
+    .ci-link:hover {
+      color: var(--gold-lt);
+      border-color: rgba(176, 125, 46, .4);
+      transform: translateY(-3px);
+    }
+
+    .ci-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(176, 125, 46, .1);
+      border: 1px solid rgba(176, 125, 46, .2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      transition: background .25s, border-color .25s
+    }
+
+    .ci-link:hover .ci-icon {
+      background: rgba(176, 125, 46, .18);
+      border-color: rgba(176, 125, 46, .35)
+    }
+
+    .ci-val {
+      font-family: var(--mono);
+      font-size: .67rem;
+      letter-spacing: .02em;
+      line-height: 1.5;
+      word-break: break-all
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #05101c;
+      padding: 1.5rem 5vw;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .1em;
+      color: #294a62
+    }
+
+    /* ── BTT ── */
+    #btt {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 42px;
+      height: 42px;
+      background: var(--gold);
+      color: #fff;
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s, transform .3s var(--ease), background .2s;
+      z-index: 300;
+      box-shadow: 0 4px 16px rgba(176, 125, 46, .4)
+    }
+
+    #btt.show {
+      opacity: 1;
+      pointer-events: all
+    }
+
+    #btt:hover {
+      background: var(--gold-lt);
+      transform: translateY(-3px)
+    }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px) {
+      .skills-layout {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .ci-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media(max-width:840px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 6rem
+      }
+
+      .hero-right {
+        order: -1
+      }
+
+      .profile-wrap {
+        width: 200px;
+        height: 200px
+      }
+
+      .profile-frame {
+        width: 170px;
+        height: 170px
+      }
+
+      .profile-ring {
+        inset: -14px
+      }
+
+      .profile-ring-2 {
+        inset: -26px
+      }
+
+      .interest-tags,
+      .hero-cta {
+        justify-content: center
+      }
+
+      .hero-bio {
+        margin: 0 auto 1.75rem
+      }
+
+      .hero-name {
+        white-space: normal
+      }
+
+      .edu-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .edu-card:nth-child(1) {
+        grid-column: 1 / -1;
+      }
+
+      .proj-grid {
+        grid-template-columns: 1fr
+      }
+
+      .proj-featured {
+        grid-column: 1
+      }
+
+      .ls-grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    @media(max-width:768px) {
+      .nav-links {
+        display: none
+      }
+
+      .nav-toggle {
+        display: flex
+      }
+
+      .mobile-drawer {
+        display: flex
+      }
+    }
+
+    @media(max-width:560px) {
+      .edu-grid {
+        grid-template-columns: 1fr
+      }
+
+      .skills-layout {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .ci-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      section {
+        padding: 4rem 0 3rem
+      }
+
+      .sh-title {
+        font-size: 1.75rem
+      }
+    }
+
+    @media(max-width:380px) {
+      .skills-layout {
+        grid-template-columns: 1fr
+      }
+
+      .hero-name {
+        font-size: 2.4rem
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="progress"></div>
+  <button id="btt" aria-label="Back to top">↑</button>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-brand">Niloy <em>Das</em></div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#education">Education</a>
+      <a href="#research">Research</a>
+      <a href="#publications">Publications</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#leadership">Service</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-toggle" id="navToggle" role="button" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <div class="mobile-drawer" id="mobileDrawer">
+    <a href="#about" onclick="closeMenu()">About</a>
+    <a href="#education" onclick="closeMenu()">Education</a>
+    <a href="#research" onclick="closeMenu()">Research</a>
+    <a href="#publications" onclick="closeMenu()">Publications</a>
+    <a href="#projects" onclick="closeMenu()">Projects</a>
+    <a href="#skills" onclick="closeMenu()">Skills</a>
+    <a href="#leadership" onclick="closeMenu()">Service</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <!-- ① eyebrow replaced; no more "ICE · NSTU Bangladesh" -->
+        <!-- <div class="hero-eyebrow">Researcher &nbsp;·&nbsp; QML &nbsp;·&nbsp; Explainable AI &nbsp;·&nbsp; Next-Gen
+          Wireless</div> -->
+        <!-- ② name on one line — <br> removed -->
+        <h1 class="hero-name">Niloy <em>Das</em></h1>
+        <!-- <p class="hero-sub">B.Sc. (Engg.) Candidate &nbsp;·&nbsp; Class Rank: 1st &nbsp;·&nbsp; Aspiring MS/PhD
+          Researcher</p> -->
+        <p class="hero-sub">B.Sc. (Engg.) Graduate &nbsp;·&nbsp; AI Researcher &nbsp;·&nbsp; Problem Solver</p>
+        <p class="hero-bio">
+          Information and Communication Engineering graduate from Noakhali Science and Technology University with a
+          strong academic foundation, specializing in artificial intelligence, data analytics, and emerging
+          technologies. Experienced in cutting-edge research, including explainable AI, large language models (LLMs),
+          and quantum learning, with peer-reviewed publications and international conference
+          acceptances. Aiming to pursue graduate studies (MS/PhD) to advance research at the intersection of quantum
+          computing, next-generation wireless systems, and trustworthy AI.
+        </p>
+
+        <div class="interests-block">
+          <div class="interests-label">Research Interests</div>
+          <div class="interest-tags">
+            <span class="itag">Quantum Machine Learning</span>
+            <span class="itag">Hybrid Quantum-Classical Architectures</span>
+            <span class="itag">ISAC &amp; LEO Satellite Systems</span>
+            <span class="itag">Explainable AI (XAI)</span>
+            <span class="itag">Deep Learning &amp; Image Restoration</span>
+            <span class="itag">SAR &amp; Remote Sensing</span>
+            <span class="itag">OTFS &amp; Reconfigurable Holographic Surfaces</span>
+            <span class="itag">Clinical Decision Support</span>
+          </div>
+        </div>
+        <div class="hero-cta">
+          <div class="cv-drop">
+            <button class="btn btn-gold">📄 View CV ▾</button>
+            <div class="cv-menu">
+              <a href="Niloy_Das_EUCV.pdf" target="_blank"><span>🇪🇺</span> Europass CV</a>
+              <a href="Das_Niloy_CV.pdf" target="_blank"><span>🇺🇸</span> US Academic CV</a>
+            </div>
+          </div>
+          <div class="cv-drop">
+            <button class="btn btn-ghost">⬇ Download CV ▾</button>
+            <div class="cv-menu">
+              <a href="Niloy_Das_EUCV.pdf" download><span>🇪🇺</span> Europass CV</a>
+              <a href="Das_Niloy_CV.pdf" download><span>🇺🇸</span> US Academic CV</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="profile-wrap">
+          <div class="profile-ring"></div>
+          <div class="profile-ring-2"></div>
+          <div class="profile-frame">
+            <!-- Replace with: <img src="your-photo.jpg" alt="Niloy Das" /> -->
+            <img src="Das_Niloy_FormalPhoto.jpg" alt="Niloy Das" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="wrap">
+      <p class="sh-label">Academic Background</p>
+      <h2 class="sh-title">Education</h2>
+      <div class="edu-grid">
+        <div class="edu-card reveal">
+          <div class="edu-year">2020 – 2025</div>
+          <div class="edu-degree">B.Sc. (Engg.) in Information and Communication Engineering</div>
+          <div class="edu-inst">Noakhali Science and Technology University (NSTU), Bangladesh</div>
+          <span class="edu-badge">CGPA 3.90 / 4.00 &nbsp;·&nbsp; Rank #1</span>
+          <p class="edu-desc">Thesis: <em>EMADNet</em> — a novel multi-noise image restoration network. Merit
+            Scholarship for 8 consecutive semesters. Coursework: Digital Communications, Signal Processing, Machine
+            Learning, AI, Computer Networks.</p>
+        </div>
+        <div class="edu-card reveal" style="transition-delay:.12s">
+          <div class="edu-year">2017 – 2019</div>
+          <div class="edu-degree">Higher Secondary Certificate (HSC) — Science</div>
+          <div class="edu-inst">Narsingdi Imperial College, Narsingdi, Bangladesh</div>
+          <span class="edu-badge">GPA 5.00 / 5.00</span>
+          <p class="edu-desc">Science stream specializing in Physics, Chemistry, Mathematics, and Biology — establishing
+            a rigorous quantitative foundation for engineering study.</p>
+        </div>
+        <div class="edu-card reveal" style="transition-delay:.24s">
+          <div class="edu-year">2012 – 2017</div>
+          <div class="edu-degree">Secondary School Certificate (SSC) — Science</div>
+          <div class="edu-inst">Brahmondi Kamini Kishor Moulik Govt. High School, Narsingdi</div>
+          <span class="edu-badge">GPA 5.00 / 5.00</span>
+          <p class="edu-desc">Perfect GPA in the science stream. Recipient of the General Grade Scholarship, Board of
+            Intermediate and Secondary Education, Dhaka.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH — v1 card style -->
+  <section id="research">
+    <div class="wrap">
+      <p class="sh-label">Academic Research</p>
+      <h2 class="sh-title">Research Experience</h2>
+      <div class="research-stack">
+
+        <div class="rc reveal">
+          <div class="rc-head">
+            <div class="rc-title">Quantum Machine Learning &amp; Next-Generation Wireless Communication (ISAC)</div>
+            <div class="rc-period">2025 – Present</div>
+          </div>
+          <ul class="rc-body">
+            <li>Designed a novel hybrid quantum-classical framework employing <em>Variational Quantum Eigensolver
+                (VQE)</em> and <em>Quantum Approximate Optimization Algorithm (QAOA)</em> via
+              <em>Qiskit</em> and <em>PennyLane</em> for spatiotemporal crime pattern classification, contributing to a
+              manuscript under review at <em>IEEE GLOBECOM 2026</em>.
+            </li>
+            <li>Implemented a full simulation pipeline and transformer-based scheduling model for OTFS-ISAC in
+              Reconfigurable Holographic Surface (RHS)-enabled LEO satellite networks; contributed to an accepted paper
+              at IEEE WCNC 2026.</li>
+            <li>Investigated QML-based scheduling strategies for OTFS-ISAC in cooperative LEO satellite systems as
+              quantum-efficient alternatives to classical deep learning approaches.</li>
+            <li>Co-developing a physics-aware transformer model for cooperative LEO RHS systems with OTFS-ISAC
+              (manuscript in preparation).</li>
+          </ul>
+          <div class="tag-row">
+            <span class="chip">Qiskit</span><span class="chip">PennyLane</span><span class="chip">VQE</span>
+            <span class="chip">QAOA</span><span class="chip">PyTorch</span><span class="chip">OTFS-ISAC</span>
+            <span class="chip">LEO Satellites</span><span class="chip">Transformers</span>
+          </div>
+        </div>
+
+        <div class="rc reveal" style="transition-delay:.1s">
+          <div class="rc-head">
+            <div class="rc-title">Machine Learning for Clinical Decision Support &amp; Explainable AI</div>
+            <div class="rc-period">2023 – 2025</div>
+          </div>
+          <ul class="rc-body">
+            <li>Developed an ensemble machine learning framework incorporating feature selection and SHAP-based
+              interpretability for hepatitis prognosis, achieving 99.25% classification accuracy; published in <em>PLOS
+                ONE</em> (Q1 journal, IF ≈ 3.7).</li>
+            <li>Applied Particle Swarm Optimization (PSO)-based hyperparameter tuning combined with LIME and SHAP
+              explanations for reliable breast cancer diagnosis, achieving 99.1% accuracy; manuscript under review at
+              <em>Applied Computational Intelligence and Soft Computing</em>.
+            </li>
+            <li>Pioneered clinically interpretable, high-performing diagnostic models that balance predictive power with
+              transparency, advancing trustworthy AI for healthcare applications.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="chip">Scikit-learn</span><span class="chip">XGBoost</span><span class="chip">SHAP</span>
+            <span class="chip">LIME</span><span class="chip">PSO</span><span class="chip">Random Forest</span>
+            <span class="chip">Feature Selection</span>
+          </div>
+        </div>
+
+        <div class="rc reveal" style="transition-delay:.2s">
+          <div class="rc-head">
+            <div class="rc-title">Deep Learning for Image Processing &amp; Remote Sensing</div>
+            <div class="rc-period">2024 – Present</div>
+          </div>
+          <ul class="rc-body">
+            <li>Designed <em>EMADNet</em>, a novel CNN architecture integrating multi-scale feature extraction,
+              adaptive filtering, and dual attention mechanisms for multi-noise image restoration; achieved PSNR &gt;40
+              dB and SSIM 0.998 across Gaussian, salt-and-pepper, and speckle noise types (Bachelor's thesis, supervised
+              by Asst. Prof. Tanvir Zaman Khan).</li>
+            <li>Developing a hybrid CNN-Transformer framework for SAR-based flood detection and affected area
+              segmentation using satellite imagery, with direct societal relevance to disaster response (manuscript in
+              preparation).</li>
+          </ul>
+          <div class="tag-row">
+            <span class="chip">PyTorch</span><span class="chip">CNN</span><span class="chip">Dual Attention</span>
+            <span class="chip">Multi-Scale Features</span><span class="chip">SAR</span>
+            <span class="chip">Remote Sensing</span><span class="chip">OpenCV</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications">
+    <div class="wrap">
+      <p class="sh-label">Scholarly Output</p>
+      <h2 class="sh-title">Publications</h2>
+
+      <div class="pub-group-hd">Peer-Reviewed Journal</div>
+      <div class="pub-item reveal">
+        <div class="pub-n">[1]</div>
+        <div>
+          <div class="pub-title">Enlightened Prognosis: Hepatitis Prediction with an Explainable Machine Learning
+            Approach</div>
+          <div class="pub-authors"><strong>N. Das</strong>, M. B. Hossain, A. Adhikary, A. D. Raha, Y. Qiao, M. M.
+            Hassan, A. K. Bairagi</div>
+          <div class="pub-venue"><em>PLOS ONE</em>, vol. 20, no. 4, e0319078, 2025. doi:
+            10.1371/journal.pone.0319078<span class="badge b-pub">Published</span><span class="badge b-pub"><a href="https://doi.org/10.1371/journal.pone.0319078" target="_blank">View</a></span></div>
+        </div>
+      </div>
+
+      <div class="pub-group-hd">Peer-Reviewed Conference Proceedings</div>
+      <div class="pub-item reveal">
+        <div class="pub-n">[2]</div>
+        <div>
+          <div class="pub-title">OTFS-Enabled ISAC Scheduling for LEO Satellite with Reconfigurable Holographic Surfaces
+            Using a Transformer Approach</div>
+          <div class="pub-authors">S. S. Hassan, A. Adhikary, <strong>N. Das</strong>, S. Sharma, T. Ratnarajah</div>
+          <div class="pub-venue"><em>IEEE WCNC 2026</em>. doi: 10.36227/techrxiv.177078189.91778386<span
+              class="badge b-accept">Accepted</span><span class="badge b-pub"><a href="https://doi.org/10.36227/techrxiv.177078189.91778386" target="_blank">View</a></span></div>
+        </div>
+      </div>
+
+      <div class="pub-group-hd">Under Review</div>
+      <div class="pub-item reveal">
+        <div class="pub-n">[3]</div>
+        <div>
+          <div class="pub-title">PSO-XAI: A PSO-Enhanced Explainable AI Framework for Reliable Breast Cancer Detection
+          </div>
+          <div class="pub-authors">M. Raquib, <strong>N. Das</strong>, F. S. Prity, A. A. Fahim, S. A. Murad, M. A.
+            Hossain, M. D. Hoque, M. A. Moni</div>
+          <div class="pub-venue"><em>Applied Computational Intelligence and Soft Computing</em>. arXiv:2510.20611<span
+              class="badge b-review">Under Review</span><span class="badge b-review"><a href="https://arxiv.org/abs/2510.20611" target="_blank">View</a></span></div>
+        </div>
+      </div>
+      <div class="pub-item reveal" style="transition-delay:.08s">
+        <div class="pub-n">[4]</div>
+        <div>
+          <div class="pub-title">Domain-Aware Hybrid Quantum Learning via Correlation-Guided Circuit Design for Crime
+            Pattern Analytics</div>
+          <div class="pub-authors"><strong>N. Das</strong>, A. Adhikary, S. S. Hassan, Y. Qiao, Z. Han, T. Ratnarajah,
+            C. S. Hong</div>
+          <div class="pub-venue"><em>IEEE GLOBECOM 2026</em> (submitted). arXiv:2604.07389<span
+              class="badge b-review">Under Review</span><span class="badge b-review"><a href="https://arxiv.org/abs/2604.07389" target="_blank">View</a></span></div>
+        </div>
+      </div>
+
+      <div class="pub-group-hd">Submitted</div>
+      <div class="pub-item reveal">
+        <div class="pub-n">[5]</div>
+        <div>
+          <div class="pub-title">A Multi-Method Framework for Depression Detection: Integrating TextBlob and VADER with
+            Clustering and Fuzzy Sentiment Analysis</div>
+          <div class="pub-authors">F. Muniat, T. Z. Khan, <strong>N. Das</strong>, S. J. Soheli, Y. Qiao, A. Adhikary
+          </div>
+          <div class="pub-venue"><em>Int. Conference on PECCII</em>, 2026<span class="badge b-submit">Submitted</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-group-hd">Manuscripts in Preparation</div>
+      <div class="pub-item reveal">
+        <div class="pub-n">[6]</div>
+        <div>
+          <div class="pub-title">Transformer-Based OTFS-ISAC Scheduling in Cooperative LEO RHS Systems with
+            Physics-Aware Learning</div>
+          <div class="pub-authors">S. S. Hassan, A. Adhikary, <strong>N. Das</strong>, T. Ratnarajah</div>
+          <div class="pub-venue"><em>Manuscript in Preparation</em>, 2026<span class="badge b-prep">In Prep</span></div>
+        </div>
+      </div>
+      <div class="pub-item reveal" style="transition-delay:.08s">
+        <div class="pub-n">[7]</div>
+        <div>
+          <div class="pub-title">Quantum-Inspired Hybrid Learning Framework for Edge-Enabled Crime Pattern
+            Identification</div>
+          <div class="pub-authors"><strong>N. Das</strong>, A. Adhikary, Y. Qiao, M. Gain, M. S. Ahsan, Z. Han, C. S.
+            Hong</div>
+          <div class="pub-venue"><em>Manuscript in Preparation</em>, 2026<span class="badge b-prep">In Prep</span></div>
+        </div>
+      </div>
+      <div class="pub-item reveal" style="transition-delay:.16s">
+        <div class="pub-n">[8]</div>
+        <div>
+          <div class="pub-title">A Hybrid CNN-Based Transformer Framework for SAR-Based Flood Detection</div>
+          <div class="pub-authors"><strong>N. Das</strong>, M. Raquib, S. Islam, A. Rahman</div>
+          <div class="pub-venue"><em>Manuscript in Preparation</em>, 2026<span class="badge b-prep">In Prep</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS — v1-style grid with featured card -->
+  <section id="projects">
+    <div class="wrap">
+      <p class="sh-label">Applied Work</p>
+      <h2 class="sh-title">Projects</h2>
+      <div class="proj-grid">
+
+        <!-- Featured — full width, navy top bar -->
+        <div class="proj-card proj-featured reveal">
+          <div class="proj-type">Bachelor's Thesis &nbsp;·&nbsp; 2024–2025</div>
+          <div class="proj-title">EMADNet: Enhanced Multi-Scale Adaptive Denoising Network for Image Restoration</div>
+          <div class="proj-desc">Designed an end-to-end CNN addressing Gaussian, salt-and-pepper, and speckle noise
+            through a unified framework integrating multi-scale feature extraction, adaptive filtering, and dual
+            channel-spatial attention for fine-grained noise suppression while preserving structural fidelity.</div>
+          <div class="proj-meta">Supervisor: Tanvir Zaman Khan, Asst. Prof., ICE, NSTU</div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <span class="proj-metric">PSNR &gt; 40 dB</span>
+            <span class="proj-metric">SSIM = 0.998</span>
+          </div>
+          <div class="pill-row">
+            <span class="pill pill-hl">PyTorch</span>
+            <span class="pill">CNN</span><span class="pill">Dual Attention</span>
+            <span class="pill">Multi-Scale Features</span><span class="pill">Adaptive Filtering</span>
+          </div>
+        </div>
+
+        <div class="proj-card reveal">
+          <div class="proj-type">Research Project &nbsp;·&nbsp; 2025 – Present</div>
+          <div class="proj-title">Hybrid Quantum-Classical Framework for Crime Pattern Classification</div>
+          <div class="proj-desc">Domain-aware QML pipeline using VQE and QAOA variational circuits for spatiotemporal
+            crime pattern classification. Full simulation via Qiskit and PennyLane; submitted to IEEE GLOBECOM 2026.
+          </div>
+          <div class="pill-row">
+            <span class="pill pill-hl">Qiskit</span><span class="pill pill-hl">PennyLane</span>
+            <span class="pill">VQE</span><span class="pill">QAOA</span><span class="pill">Python</span>
+          </div>
+        </div>
+
+        <div class="proj-card reveal" style="transition-delay:.1s">
+          <div class="proj-type">Research Project &nbsp;·&nbsp; 2023–2025</div>
+          <div class="proj-title">XAI-Driven Clinical Diagnostics</div>
+          <div class="proj-desc">Ensemble ML pipelines for hepatitis prognosis (99.25% acc.) and breast cancer diagnosis
+            (99.1% acc.) with SHAP and LIME interpretability. PSO-optimized hyperparameters — two publications resulted.
+          </div>
+          <div class="pill-row">
+            <span class="pill">Scikit-learn</span><span class="pill">XGBoost</span>
+            <span class="pill pill-hl">SHAP</span><span class="pill">LIME</span><span class="pill">PSO</span>
+          </div>
+        </div>
+
+        <div class="proj-card reveal" style="transition-delay:.2s">
+          <div class="proj-type">Research Project &nbsp;·&nbsp; 2024 – Present</div>
+          <div class="proj-title">SAR-Based Flood Detection via Hybrid CNN-Transformer</div>
+          <div class="proj-desc">Hybrid CNN-Transformer model for flood detection and affected area segmentation from
+            Synthetic Aperture Radar satellite imagery, targeting automated disaster response. Manuscript in
+            preparation.</div>
+          <div class="pill-row">
+            <span class="pill">PyTorch</span><span class="pill pill-hl">Transformers</span>
+            <span class="pill">SAR</span><span class="pill">Remote Sensing</span><span class="pill">Segmentation</span>
+          </div>
+        </div>
+
+        <div class="proj-card reveal" style="transition-delay:.3s">
+          <div class="proj-type">Internship Project &nbsp;·&nbsp; 2024</div>
+          <div class="proj-title">Library Management System</div>
+          <div class="proj-desc">Full-stack Library Management System built in a professional team using Laravel, MySQL,
+            and RESTful APIs for managing resources, inventory, and member workflows during a software development
+            internship at Business Automation Limited.</div>
+          <div class="pill-row">
+            <span class="pill">Laravel</span><span class="pill">PHP</span>
+            <span class="pill">MySQL</span><span class="pill">RESTful API</span><span class="pill">JavaScript</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="wrap">
+      <p class="sh-label">Technical Competencies</p>
+      <h2 class="sh-title">Technical Skills</h2>
+      <div class="skills-layout">
+        <div class="reveal">
+          <div class="sg-title">Programming Languages</div>
+          <div class="pill-row">
+            <span class="pill pill-hl">Python</span>
+            <span class="pill">C / C++</span><span class="pill">MATLAB</span><span class="pill">PHP</span>
+          </div>
+        </div>
+        <div class="reveal" style="transition-delay:.07s">
+          <div class="sg-title">Deep Learning &amp; ML</div>
+          <div class="pill-row">
+            <span class="pill pill-hl">PyTorch</span><span class="pill">TensorFlow / Keras</span>
+            <span class="pill">Scikit-learn</span><span class="pill">XGBoost</span><span class="pill">Random
+              Forest</span>
+          </div>
+        </div>
+        <div class="reveal" style="transition-delay:.14s">
+          <div class="sg-title">Quantum Computing</div>
+          <div class="pill-row">
+            <span class="pill pill-hl">Qiskit</span><span class="pill pill-hl">PennyLane</span>
+            <span class="pill">VQE</span><span class="pill">QAOA</span><span class="pill">Hybrid QC Models</span>
+          </div>
+        </div>
+        <div class="reveal" style="transition-delay:.21s">
+          <div class="sg-title">Explainable AI &amp; Vision</div>
+          <div class="pill-row">
+            <span class="pill pill-hl">SHAP</span><span class="pill">LIME</span>
+            <span class="pill">OpenCV</span><span class="pill">Image Segmentation</span><span class="pill">Medical
+              Imaging</span>
+          </div>
+        </div>
+        <div class="reveal" style="transition-delay:.28s">
+          <div class="sg-title">Tools &amp; Platforms</div>
+          <div class="pill-row">
+            <span class="pill">Git / GitHub</span><span class="pill">Linux</span>
+            <span class="pill">Jupyter</span><span class="pill">Docker</span>
+            <span class="pill">LaTeX</span><span class="pill">Postman</span>
+          </div>
+        </div>
+        <div class="reveal" style="transition-delay:.35s">
+          <div class="sg-title">Web &amp; Databases</div>
+          <div class="pill-row">
+            <span class="pill">Laravel</span><span class="pill">Django</span>
+            <span class="pill">HTML5 / CSS3</span><span class="pill">MySQL</span>
+            <span class="pill">MongoDB</span><span class="pill">PostgreSQL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEADERSHIP -->
+  <section id="leadership">
+    <div class="wrap">
+      <p class="sh-label">Engagement &amp; Impact</p>
+      <h2 class="sh-title">Leadership &amp; Service</h2>
+      <div class="ls-grid">
+        <div class="ls-card reveal">
+          <div class="ls-dot"></div>
+          <div>
+            <div class="ls-role">Vice President — ICE Programming Club</div>
+            <div class="ls-org">NSTU &nbsp;·&nbsp; Mar 2024 – Oct 2025</div>
+            <div class="ls-desc">Led club operations, organized technical events and programming contests, and managed
+              student teams to foster computational problem-solving within the ICE department.</div>
+          </div>
+        </div>
+        <div class="ls-card reveal" style="transition-delay:.1s">
+          <div class="ls-dot"></div>
+          <div>
+            <div class="ls-role">Volunteer &amp; Organizer — Flood Relief</div>
+            <div class="ls-org">Manush manusher jonno Foundation &nbsp;·&nbsp; Aug–Sep 2024</div>
+            <div class="ls-desc">Coordinated food and water distribution, fundraising, and community support for
+              flood-affected populations in Noakhali across multiple relief cycles.</div>
+          </div>
+        </div>
+        <div class="ls-card reveal" style="transition-delay:.2s">
+          <div class="ls-dot"></div>
+          <div>
+            <div class="ls-role">Software Development Intern</div>
+            <div class="ls-org">Business Automation Limited, Dhaka &nbsp;·&nbsp; Feb–Apr 2024</div>
+            <div class="ls-desc">Built full-stack web applications using Laravel, MySQL, and RESTful APIs. Selected as
+              top-10 intern from the full cohort.</div>
+          </div>
+        </div>
+        <div class="ls-card reveal" style="transition-delay:.3s">
+          <div class="ls-dot"></div>
+          <div>
+            <div class="ls-role">Private Academic Tutor</div>
+            <div class="ls-org">Self-Employed &nbsp;·&nbsp; 2023 – Present</div>
+            <div class="ls-desc">Delivers individualized instruction in science subjects to SSC/HSC students, designing
+              customized lesson plans and assessment frameworks to systematically track learning progress.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT — icon-focused, no intro paragraph -->
+  <section id="contact">
+    <div class="wrap">
+      <p class="sh-label">Reach Out</p>
+      <h2 class="sh-title">Contact</h2>
+      <!-- ④ icon-only grid, intro text removed -->
+      <div class="ci-grid">
+        <a class="ci-link" href="mailto:dasnil684@gmail.com">
+          <i class="fa-solid fa-envelope"></i>
+        </a>
+
+        <a class="ci-link" href="tel:+8801974337950">
+          <i class="fa-solid fa-phone"></i>
+        </a>
+
+        <a class="ci-link" href="https://linkedin.com/in/niloy-das" target="_blank">
+          <i class="fa-brands fa-linkedin-in"></i>
+        </a>
+
+        <a class="ci-link" href="https://github.com/niloy-das" target="_blank">
+          <i class="fa-brands fa-github"></i>
+        </a>
+
+        <a class="ci-link" href="https://www.researchgate.net/profile/Niloy-Das-9" target="_blank">
+          <i class="fa-brands fa-researchgate"></i>
+        </a>
+
+        <a class="ci-link" href="https://orcid.org/0009-0007-0585-2818" target="_blank">
+          <i class="fa-brands fa-orcid"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER — simplified -->
+  <footer>
+    <div>© 2025 <span style="color:#4a7a94">Niloy Das</span></div>
+  </footer>
+
+  <script>
+    /* Scroll reveal */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: .08 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* Progress + BTT + active nav */
+    const prog = document.getElementById('progress');
+    const btt = document.getElementById('btt');
+
+    /* ⑥ BTT fix — using addEventListener instead of inline onclick */
+    btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    window.addEventListener('scroll', () => {
+      const s = window.scrollY || document.documentElement.scrollTop;
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      if (h > 0) prog.style.width = (s / h * 100) + '%';
+      btt.classList.toggle('show', s > 400);
+      document.querySelectorAll('section[id]').forEach(sec => {
+        const a = document.querySelector('.nav-links a[href="#' + sec.id + '"]');
+        if (!a) return;
+        const top = sec.offsetTop - 80;
+        a.classList.toggle('active', s >= top && s < top + sec.offsetHeight);
+      });
+    }, { passive: true });
+
+    /* Hamburger */
+    const toggle = document.getElementById('navToggle');
+    const drawer = document.getElementById('mobileDrawer');
+    let drawerOpen = false;
+
+    toggle.addEventListener('click', () => {
+      drawerOpen = !drawerOpen;
+      toggle.classList.toggle('open', drawerOpen);
+      drawer.style.display = 'flex';
+      requestAnimationFrame(() => drawer.classList.toggle('open', drawerOpen));
+      if (!drawerOpen) setTimeout(() => { if (!drawerOpen) drawer.style.display = 'none'; }, 300);
+    });
+
+    function closeMenu() {
+      drawerOpen = false;
+      toggle.classList.remove('open');
+      drawer.classList.remove('open');
+      setTimeout(() => { drawer.style.display = 'none'; }, 300);
+    }
+
+    document.addEventListener('click', e => {
+      if (drawerOpen && !toggle.contains(e.target) && !drawer.contains(e.target)) closeMenu();
+    });
+  </script>
+</body>
+
+</html>
